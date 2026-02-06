@@ -7,18 +7,18 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class WiseSayingControllerTest {
-    @Test
-    @DisplayName("'== 명언 앱==' 출력")
 
+    @Test
+    @DisplayName("'== 명언 앱 ==' 출력")
     void t1() {
         String out = AppTestRunner.run("");
 
         assertThat(out).contains("== 명언 앱 ==");
+
     }
 
     @Test
     @DisplayName("등록")
-
     void t2() {
         String out = AppTestRunner.run("""
                 등록
@@ -33,7 +33,6 @@ public class WiseSayingControllerTest {
 
     @Test
     @DisplayName("등록 시 명언 번호 노출")
-
     void t3() {
         String out = AppTestRunner.run("""
                 등록
@@ -75,7 +74,8 @@ public class WiseSayingControllerTest {
         assertThat(out)
                 .contains("번호 / 작가 / 명언")
                 .contains("----------------------")
-                .containsSubsequence("2 / 작자미상 / 과거에 집착하지 마라.", "1 / 작자미상 / 현재를 사랑하라.");
+                .containsSubsequence("2 / 작자미상 / 과거에 집착하지 마라."
+                        , "1 / 작자미상 / 현재를 사랑하라.");
 
     }
 }
