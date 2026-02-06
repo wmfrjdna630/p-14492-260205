@@ -29,11 +29,15 @@ public class TestUtilTest {
 
     @Test
     @DisplayName("TestUtil.setOutByteArray()")
-    void t2() {
+    void t2() throws Exception {
         ByteArrayOutputStream byteArrayOutputStream = TestUtil.setOutByteArray();
 
         System.out.println("안녕하세요");
         String rst = byteArrayOutputStream.toString();
+
+        TestUtil.clearSetOutToByteArray(byteArrayOutputStream);
+
+        System.out.println("출력 결과 : " + rst);
 
         assertThat(rst).contains("안녕하세요");
     }
