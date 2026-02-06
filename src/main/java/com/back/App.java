@@ -2,19 +2,21 @@ package com.back;
 
 import com.back.system.controller.SystemController;
 import com.back.wiseSaying.controller.WiseSayingController;
+import com.back.wiseSaying.global.AppContext;
+import com.back.wiseSaying.global.Rq;
 
 import java.util.Scanner;
 
 public class App {
 
     private Scanner sc;
-    private WiseSayingController wiseSayingController = new WiseSayingController(sc);
+    private WiseSayingController wiseSayingController = new WiseSayingController();
     private SystemController systemController = new SystemController();
 
-    public App(Scanner sc){
-        this.sc = sc;
-        this.wiseSayingController = new WiseSayingController(sc);
-        this.systemController = new SystemController();
+    public App() {
+        this.sc = AppContext.sc;
+        wiseSayingController = AppContext.wiseSayingController;
+        systemController = AppContext.systemController;
     }
 
     public void run() {
@@ -23,9 +25,14 @@ public class App {
         while(true) {
             System.out.println("명령) ");
             String cmd = sc.nextLine();
-            switch (cmd) {
+
+            Rq rq = new Rq(cmd);
+            String action = rq.getActionName();
+
+            switch (action) {
                 case "등록" -> wiseSayingController.actionAdd();
                 case "목록" -> wiseSayingController.actionList();
+                case "삭제" -> wiseSayingController.actionDelete(rq);
                 case "종료" -> {
                     systemController.actionExit();
                     return;
