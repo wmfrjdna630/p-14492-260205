@@ -4,19 +4,6 @@ import java.util.Scanner;
 
 public class TestUtil {
 
-//    public static String run(String input){
-//
-//        // 입력값
-//        Scanner scan = new Scanner(input);
-//
-//        // 명언 프로그램 실행
-//
-//
-//        // 출력값
-//
-//
-//    }
-
     private static PrintStream ORIGINAL_OUT = System.out;
     private static PrintStream CURRENT_OUT = System.out;
 
