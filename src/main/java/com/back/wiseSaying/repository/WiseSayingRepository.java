@@ -1,6 +1,7 @@
 package com.back.wiseSaying.repository;
 
 
+import com.back.wiseSaying.dto.PageDto;
 import com.back.wiseSaying.entity.WiseSaying;
 
 import java.util.ArrayList;
@@ -32,27 +33,39 @@ public class WiseSayingRepository {
                 .orElse(null);
     }
 
-    public List<WiseSaying> findListDesc(int page, int pageSize) {
-        return wiseSayings.reversed()
+    public PageDto findListDesc(int page, int pageSize) {
+        return pageOf(wiseSayings, page, pageSize);
+    }
+
+    public PageDto findByContentKeywordOrderByDesc(String kw, int page, int pageSize) {
+
+        List<WiseSaying> filteredContent = wiseSayings.reversed()
+                .stream()
+                .filter(w -> w.getSaying().contains(kw))
+                .toList();
+
+        return pageOf(filteredContent, page, pageSize);
+    }
+
+    public PageDto findByAuthorKeywordOrderByDesc(String kw, int page, int pageSize) {
+
+        List<WiseSaying> filteredContent = wiseSayings.reversed()
+                .stream()
+                .filter(w -> w.getAuthor().contains(kw))
+                .toList();
+
+
+        return pageOf(filteredContent, page, pageSize);
+    }
+
+    private PageDto pageOf(List<WiseSaying> filteredContent, int page, int pageSize) {
+        int totalCount = filteredContent.size();
+        List<WiseSaying> pageFilteredContent = filteredContent.reversed()
                 .stream()
                 .skip((page - 1) * pageSize)
                 .limit(pageSize)
                 .toList();
-    }
 
-    public List<WiseSaying> findByContentKeywordOrderByDesc(String kw, int page, int pageSize) {
-        return wiseSayings.reversed().stream()
-                .filter(w -> w.getSaying().contains(kw))
-                .skip((page - 1) * pageSize)
-                .limit(pageSize)
-                .toList();
-    }
-
-    public List<WiseSaying> findByAuthorKeywordOrderByDesc(String kw, int page, int pageSize) {
-        return wiseSayings.reversed().stream()
-                .filter(w -> w.getAuthor().contains(kw))
-                .skip((page - 1) * pageSize)
-                .limit(pageSize)
-                .toList();
+        return new PageDto(page, pageSize, totalCount, pageFilteredContent);
     }
 }
