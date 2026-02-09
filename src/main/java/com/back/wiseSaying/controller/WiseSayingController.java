@@ -29,11 +29,20 @@ public class WiseSayingController {
         System.out.println("%d번 명언이 등록되었습니다.".formatted(wiseSaying.getId()));
     }
 
-    public void actionList() {
+    public void actionList(Rq rq) {
+
+        String keywordType = rq.getParam("keywordType", "");
+        String kw = rq.getParam("keyword", "");
+
+        System.out.println("----------------------");
+        System.out.println("검색타입 : %s".formatted("keywordType"));
+        System.out.println("검색어 : %s".formatted("keyword"));
+        System.out.println("----------------------");
+
         System.out.println("번호 / 작가 / 명언");
         System.out.println("----------------------");
 
-        List<WiseSaying> wiseSayings = wiseSayingService.findListDesc();
+        List<WiseSaying> wiseSayings = wiseSayingService.findListDesc(kw);
 
         wiseSayings
                 .stream()
