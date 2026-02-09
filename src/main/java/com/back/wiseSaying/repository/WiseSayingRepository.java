@@ -21,7 +21,10 @@ public class WiseSayingRepository {
     }
 
     public List<WiseSaying> findListDesc() {
-        return wiseSayings.reversed();
+        return wiseSayings.reversed()
+                .stream()
+                .limit(5)
+                .toList();
     }
     public boolean delete(int id) {
         return wiseSayings.removeIf(wiseSaying -> wiseSaying.getId() == id);
@@ -36,16 +39,16 @@ public class WiseSayingRepository {
     }
 
     public List<WiseSaying> findByContentKeywordOrderByDesc(String kw) {
-        return wiseSayings.stream()
+        return wiseSayings.reversed().stream()
                 .filter(w -> w.getSaying().contains(kw))
-                .toList()
-                .reversed();
+                .limit(5)
+                .toList();
     }
 
     public List<WiseSaying> findByAuthorKeywordOrderByDesc(String kw) {
-        return wiseSayings.stream()
+        return wiseSayings.reversed().stream()
                 .filter(w -> w.getAuthor().contains(kw))
-                .toList()
-                .reversed();
+                .limit(5)
+                .toList();
     }
 }
