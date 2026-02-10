@@ -2,8 +2,7 @@ package com.back.wiseSaying.repository;
 
 import com.back.wiseSaying.entity.WiseSaying;
 import com.back.wiseSaying.global.AppContext;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -14,6 +13,16 @@ public class WiseSayingFileRepositoryTest {
     public WiseSayingFileRepositoryTest() {
         AppContext.init();
         wiseSayingFileRepository = AppContext.wiseSayingFileRepository;
+    }
+
+    @BeforeEach
+    public void beforeClear(){
+        wiseSayingFileRepository.clear();
+    }
+
+    @AfterEach
+    public void afterClear(){
+        wiseSayingFileRepository.clear();
     }
 
     @Test

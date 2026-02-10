@@ -43,4 +43,5 @@ bin/
 .DS_Store
 
 ### custom ###
-temp
+temp/
+db/
