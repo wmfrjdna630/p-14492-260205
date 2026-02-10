@@ -3,6 +3,7 @@ package com.back.wiseSaying.repository;
 import com.back.standard.util.Util;
 import com.back.wiseSaying.entity.WiseSaying;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -20,7 +21,11 @@ public class WiseSayingFileRepository {
             String jsonStr = Util.json.toString(wiseSayingMap);
             Util.file.set("%s/%d.json".formatted(getDbPath(), wiseSaying.getId()), jsonStr);
 
+            return wiseSaying;
         }
+
+        String jsonStr = Util.json.toString(wiseSaying.toMap());
+        Util.file.set("%s/%d.json".formatted(getDbPath(), wiseSaying.getId()), jsonStr);
 
         return wiseSaying;
     }
@@ -58,4 +63,11 @@ public class WiseSayingFileRepository {
     }
 
 
+    public List<WiseSaying> findAll() {
+        return Util.file.walkRegularFiles(getDbPath(), "^\\d+\\.json$")
+                .map(path -> Util.file.get(path.toString(), ""))
+                .map(Util.json::toMap)
+                .map(WiseSaying::fromMap)
+                .toList();
+    }
 }
