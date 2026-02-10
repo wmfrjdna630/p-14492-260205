@@ -25,6 +25,10 @@ public class WiseSayingFileRepository {
         return wiseSaying;
     }
 
+    public void delete(WiseSaying wiseSaying1) {
+        Util.file.delete("%s/%d.json".formatted(getDbPath(), wiseSaying1.getId()));
+    }
+
     private int getLastId() {
         return Util.file.getAsInt("%s/lastId.txt".formatted(getDbPath()), 0);
     }
@@ -52,4 +56,6 @@ public class WiseSayingFileRepository {
     public String getDbPath() {
         return "db/wiseSaying";
     }
+
+
 }
