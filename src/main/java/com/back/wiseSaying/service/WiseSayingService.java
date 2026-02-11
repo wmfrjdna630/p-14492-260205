@@ -1,9 +1,12 @@
 package com.back.wiseSaying.service;
 
+import com.back.global.AppContext;
 import com.back.wiseSaying.dto.PageDto;
 import com.back.wiseSaying.entity.WiseSaying;
-import com.back.wiseSaying.global.AppContext;
 import com.back.wiseSaying.repository.WiseSayingRepository;
+
+import java.util.Optional;
+
 public class WiseSayingService {
 
     private WiseSayingRepository wiseSayingRepository;
@@ -19,20 +22,12 @@ public class WiseSayingService {
         return wiseSaying;
     }
 
-    public PageDto findListDesc(String kw, String kwt, int page, int pageSize) {
-        return switch (kwt) {
-            case "content" -> wiseSayingRepository.findByContentKeywordOrderByDesc(kw, page, pageSize);
-            case "author" -> wiseSayingRepository.findByAuthorKeywordOrderByDesc(kw, page, pageSize);
-            default -> wiseSayingRepository.findListDesc(page, pageSize);
-        };
-    }
-
     public boolean delete(int id) {
-        return wiseSayingRepository.delete(id);
-    }
-
-    public WiseSaying findByIdOrNull(int id) {
-        return wiseSayingRepository.findByIdOrNull(id);
+        Optional<WiseSaying> wiseSayingOp = wiseSayingRepository.findById(id);
+        if(wiseSayingOp.isEmpty()) {
+            return false;
+        }
+        return wiseSayingRepository.delete(wiseSayingOp.get());
     }
 
     public void modify(WiseSaying wiseSaying, String newSaying, String newAuthor) {
@@ -42,4 +37,17 @@ public class WiseSayingService {
 
         wiseSayingRepository.save(wiseSaying);
     }
+
+    public PageDto findListDesc(String kw, String kwt, int page, int pageSize) {
+        return switch (kwt) {
+            case "content" -> wiseSayingRepository.findByContentContainingDesc(kw, page, pageSize);
+            case "author" -> wiseSayingRepository.findByAuthorContainingDesc(kw, page, pageSize);
+            default -> wiseSayingRepository.findAll(page, pageSize);
+        };
+    }
+
+    public WiseSaying findByIdOrNull(int id) {
+        return wiseSayingRepository.findById(id).orElse(null);
+    }
+
 }

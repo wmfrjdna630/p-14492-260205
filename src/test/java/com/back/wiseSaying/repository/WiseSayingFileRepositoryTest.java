@@ -1,7 +1,9 @@
 package com.back.wiseSaying.repository;
 
+import com.back.wiseSaying.dto.PageDto;
 import com.back.wiseSaying.entity.WiseSaying;
-import com.back.wiseSaying.global.AppContext;
+import com.back.global.AppConfig;
+import com.back.global.AppContext;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -16,17 +18,18 @@ public class WiseSayingFileRepositoryTest {
     private WiseSayingFileRepository wiseSayingFileRepository;
 
     public WiseSayingFileRepositoryTest() {
+        AppConfig.setTestMode();
         AppContext.init();
         wiseSayingFileRepository = AppContext.wiseSayingFileRepository;
     }
 
     @BeforeEach
-    public void beforeClear(){
+    public void beforeClear() {
         wiseSayingFileRepository.clear();
     }
 
     @AfterEach
-    public void afterClear(){
+    public void afterClear() {
         wiseSayingFileRepository.clear();
     }
 
@@ -38,6 +41,8 @@ public class WiseSayingFileRepositoryTest {
         wiseSayingFileRepository.save(wiseSaying);
 
         WiseSaying foundedWiseSaying = wiseSayingFileRepository.findById(1).get();
+        System.out.println(wiseSaying);
+        System.out.println(foundedWiseSaying);
 
         assertThat(foundedWiseSaying).isEqualTo(wiseSaying);
 
@@ -126,4 +131,49 @@ public class WiseSayingFileRepositoryTest {
 
     }
 
+    @Test
+    @DisplayName("명언 다건 조회 - content 필터링")
+    void t6() {
+
+        WiseSaying wiseSaying1 = new WiseSaying("꿈을 지녀라. 그러면 어려운 현실을 이길 수 있다.", "괴테");
+        wiseSayingFileRepository.save(wiseSaying1);
+
+        WiseSaying wiseSaying2 = new WiseSaying("너 자신을 알라.", "소크라테스");
+        wiseSayingFileRepository.save(wiseSaying2);
+
+        WiseSaying wiseSaying3 = new WiseSaying("꿈은 현실이 된다.", "작자미상");
+        wiseSayingFileRepository.save(wiseSaying3);
+
+        PageDto pageDto = wiseSayingFileRepository.findByContentContainingDesc("꿈", 1, 5);
+
+        assertThat(pageDto.getContent())
+                .containsExactly(
+                        wiseSaying3,
+                        wiseSaying1
+                );
+
+    }
+
+    @Test
+    @DisplayName("명언 다건 조회 - author 필터링")
+    void t7() {
+
+        WiseSaying wiseSaying1 = new WiseSaying("꿈을 지녀라. 그러면 어려운 현실을 이길 수 있다.", "괴테");
+        wiseSayingFileRepository.save(wiseSaying1);
+
+        WiseSaying wiseSaying2 = new WiseSaying("너 자신을 알라.", "소크라테스");
+        wiseSayingFileRepository.save(wiseSaying2);
+
+        WiseSaying wiseSaying3 = new WiseSaying("꿈은 현실이 된다.", "작자미상");
+        wiseSayingFileRepository.save(wiseSaying3);
+
+        PageDto pageDto = wiseSayingFileRepository.findByAuthorContainingDesc("테", 1, 5);
+
+        assertThat(pageDto.getContent())
+                .containsExactly(
+                        wiseSaying2,
+                        wiseSaying1
+                );
+
+    }
 }

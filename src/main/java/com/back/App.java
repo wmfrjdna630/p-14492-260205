@@ -2,16 +2,16 @@ package com.back;
 
 import com.back.system.controller.SystemController;
 import com.back.wiseSaying.controller.WiseSayingController;
-import com.back.wiseSaying.global.AppContext;
-import com.back.wiseSaying.global.Rq;
+import com.back.global.AppContext;
+import com.back.global.Rq;
 
 import java.util.Scanner;
 
 public class App {
 
     private Scanner sc;
-    private WiseSayingController wiseSayingController = new WiseSayingController();
-    private SystemController systemController = new SystemController();
+    private WiseSayingController wiseSayingController;
+    private SystemController systemController;
 
     public App() {
         this.sc = AppContext.sc;
@@ -20,9 +20,12 @@ public class App {
     }
 
     public void run() {
+
+
         System.out.println("== 명언 앱 ==");
 
-        while(true) {
+        while (true) {
+
             System.out.println("명령) ");
             String cmd = sc.nextLine();
 
